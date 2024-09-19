@@ -5,7 +5,8 @@
   "main": "webpack.config.js",
   "scripts": {
     "build": "webpack",
-    "start": "webpack serve --open"
+    "start": "webpack serve --open",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,7 @@
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
     "css-loader": "^7.1.2",
+    "prettier": "^3.3.3",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",

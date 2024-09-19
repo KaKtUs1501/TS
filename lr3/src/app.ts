@@ -1,7 +1,7 @@
-import { BookService, UserService } from "./services";
-import { Validation } from "./validation";
-import { Modal } from "./modal";
-import { IBook, IUser } from "./models";
+import { BookService, UserService } from './services';
+import { Validation } from './validation';
+import { Modal } from './modal';
+import { IBook, IUser } from './models';
 
 class App {
   bookService: BookService;
@@ -15,13 +15,12 @@ class App {
     this.displayUsers();
   }
 
-  
   addBook = () => {
-    const titleInput = document.getElementById("bookTitle") as HTMLInputElement;
+    const titleInput = document.getElementById('bookTitle') as HTMLInputElement;
     const authorInput = document.getElementById(
-      "bookAuthor"
+      'bookAuthor'
     ) as HTMLInputElement;
-    const yearInput = document.getElementById("bookYear") as HTMLInputElement;
+    const yearInput = document.getElementById('bookYear') as HTMLInputElement;
 
     const title = titleInput.value;
     const author = authorInput.value;
@@ -36,19 +35,19 @@ class App {
     const success = this.bookService.addBook(title, author, year);
     if (success) {
       this.clearValidationErrors();
-      Modal.showSuccessModal("Книгу успішно додано!");
-      titleInput.value = "";
-      authorInput.value = "";
-      yearInput.value = "";
+      Modal.showSuccessModal('Книгу успішно додано!');
+      titleInput.value = '';
+      authorInput.value = '';
+      yearInput.value = '';
       this.displayBooks();
     } else {
-      Modal.showSuccessModal("Не вдалося додати книгу.");
+      Modal.showSuccessModal('Не вдалося додати книгу.');
     }
   };
 
   addUser = () => {
-    const nameInput = document.getElementById("userName") as HTMLInputElement;
-    const emailInput = document.getElementById("userEmail") as HTMLInputElement;
+    const nameInput = document.getElementById('userName') as HTMLInputElement;
+    const emailInput = document.getElementById('userEmail') as HTMLInputElement;
 
     const name = nameInput.value;
     const email = emailInput.value;
@@ -62,55 +61,54 @@ class App {
     const success = this.userService.addUser(name, email);
     if (success) {
       this.clearValidationErrors();
-      Modal.showSuccessModal("Користувача успішно додано!");
-      nameInput.value = "";
-      emailInput.value = "";
+      Modal.showSuccessModal('Користувача успішно додано!');
+      nameInput.value = '';
+      emailInput.value = '';
       this.displayUsers();
     } else {
-      Modal.showSuccessModal("Не вдалося додати користувача.");
+      Modal.showSuccessModal('Не вдалося додати користувача.');
     }
   };
 
   initEventListeners = () => {
     document
-      .getElementById("addBookBtn")
-      ?.addEventListener("click", this.addBook);
+      .getElementById('addBookBtn')
+      ?.addEventListener('click', this.addBook);
     document
-      .getElementById("addUserBtn")
-      ?.addEventListener("click", this.addUser);
+      .getElementById('addUserBtn')
+      ?.addEventListener('click', this.addUser);
     document
-      .getElementById("booksList")
-      ?.addEventListener("click", this.handleBookAction);
+      .getElementById('booksList')
+      ?.addEventListener('click', this.handleBookAction);
   };
 
-  
   displayBooks = () => {
-    const booksListElement = document.getElementById("booksList");
+    const booksListElement = document.getElementById('booksList');
 
     if (booksListElement) {
       booksListElement.innerHTML = this.bookService
         .getAllBooks()
         .map((book) => this.createBookListItem(book))
-        .join("");
+        .join('');
     }
   };
 
   createBookListItem = (book: IBook) => {
-    const buttonClass = book.isBorrowed ? "btn-warning" : "btn-primary";
-    const buttonText = book.isBorrowed ? "Повернути" : "Позичити";
+    const buttonClass = book.isBorrowed ? 'btn-warning' : 'btn-primary';
+    const buttonText = book.isBorrowed ? 'Повернути' : 'Позичити';
     return `
           <li class="d-flex justify-content-between align-items-center mb-2">
               <span>${book.title} by ${book.author} (${book.year})</span>
               <button class="btn ${buttonClass} btn-sm" data-book-id="${
-      book.id
-    }" data-action="${
-      book.isBorrowed ? "return" : "borrow"
-    }">${buttonText}</button>
+                book.id
+              }" data-action="${
+                book.isBorrowed ? 'return' : 'borrow'
+              }">${buttonText}</button>
           </li>`;
   };
 
   displayUsers = () => {
-    const usersListElement = document.getElementById("usersList");
+    const usersListElement = document.getElementById('usersList');
 
     if (usersListElement) {
       usersListElement.innerHTML = this.userService
@@ -119,19 +117,19 @@ class App {
           (user) =>
             `<li>${user.name} (${user.email}) - ID: ${user.id} - Позичені книги: ${user.borrowedBooks.length}</li>`
         )
-        .join("");
+        .join('');
     }
   };
 
   handleBookAction = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (target.tagName === "BUTTON") {
-      const bookId = target.getAttribute("data-book-id");
-      const action = target.getAttribute("data-action");
+    if (target.tagName === 'BUTTON') {
+      const bookId = target.getAttribute('data-book-id');
+      const action = target.getAttribute('data-action');
       if (bookId && action) {
-        if (action === "borrow") {
+        if (action === 'borrow') {
           this.showBorrowBookModal(bookId);
-        } else if (action === "return") {
+        } else if (action === 'return') {
           this.returnBook(bookId);
         }
       }
@@ -148,19 +146,19 @@ class App {
     try {
       this.bookService.borrowBook(bookId);
       this.userService.borrowBook(userId, bookId);
-      Modal.showSuccessBookActionModal("borrowed");
+      Modal.showSuccessBookActionModal('borrowed');
       this.displayBooks();
       this.displayUsers();
     } catch (error) {
       if (
         error instanceof Error &&
-        error.message === "Користувач не може позичити більше 3-х книг"
+        error.message === 'Користувач не може позичити більше 3-х книг'
       ) {
-        Modal.showErrorModal("Помилка позичення книги", error.message);
+        Modal.showErrorModal('Помилка позичення книги', error.message);
       } else {
         Modal.showErrorModal(
-          "Помилка позичення книги",
-          "Не вдалося позичити книгу."
+          'Помилка позичення книги',
+          'Не вдалося позичити книгу.'
         );
       }
       this.updateBookButtonState(bookId, false);
@@ -168,18 +166,20 @@ class App {
   };
 
   updateBookButtonState = (bookId: string, isBorrowed: boolean) => {
-    const bookElement = document.querySelector(`[data-book-id="${bookId}"]`) as HTMLButtonElement;
+    const bookElement = document.querySelector(
+      `[data-book-id="${bookId}"]`
+    ) as HTMLButtonElement;
     if (bookElement) {
       if (isBorrowed) {
-        bookElement.textContent = "Повернути";
-        bookElement.classList.remove("btn-primary");
-        bookElement.classList.add("btn-warning");
-        bookElement.setAttribute("data-action", "return");
+        bookElement.textContent = 'Повернути';
+        bookElement.classList.remove('btn-primary');
+        bookElement.classList.add('btn-warning');
+        bookElement.setAttribute('data-action', 'return');
       } else {
-        bookElement.textContent = "Позичити";
-        bookElement.classList.remove("btn-warning");
-        bookElement.classList.add("btn-primary");
-        bookElement.setAttribute("data-action", "borrow");
+        bookElement.textContent = 'Позичити';
+        bookElement.classList.remove('btn-warning');
+        bookElement.classList.add('btn-primary');
+        bookElement.setAttribute('data-action', 'borrow');
       }
     }
   };
@@ -190,29 +190,29 @@ class App {
       if (user) {
         this.bookService.returnBook(bookId);
         this.userService.returnBook(user.id, bookId);
-        Modal.showSuccessBookActionModal("returned");
+        Modal.showSuccessBookActionModal('returned');
         this.displayBooks();
         this.displayUsers();
       }
     } catch (error) {
-      console.error("Error returning book:", error);
+      console.error('Error returning book:', error);
       Modal.showErrorModal(
-        "Помилка повернення книги",
-        "Не вдалося повернути книгу."
+        'Помилка повернення книги',
+        'Не вдалося повернути книгу.'
       );
     }
   };
 
   private clearValidationErrors() {
     const errorElements = document.querySelectorAll(
-      ".is-invalid, .border-danger"
+      '.is-invalid, .border-danger'
     );
     errorElements.forEach((element) => {
-      element.classList.remove("is-invalid", "border-danger");
+      element.classList.remove('is-invalid', 'border-danger');
     });
 
     const errorMessages = document.querySelectorAll(
-      ".invalid-feedback, .text-danger"
+      '.invalid-feedback, .text-danger'
     );
     errorMessages.forEach((element) => {
       element.remove();
@@ -220,7 +220,6 @@ class App {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   new App();
 });
-
