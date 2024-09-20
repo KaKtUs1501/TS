@@ -11,17 +11,17 @@ module.exports = [
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'module',
-        project: ['./tsconfig.json'] // Укажи шлях до tsconfig, якщо він є
-      }
+        project: ['./tsconfig.json'], // Укажи шлях до tsconfig, якщо він є
+      },
     },
     plugins: {
       '@typescript-eslint': typescriptPlugin,
-      prettier: pluginPrettier
+      prettier: pluginPrettier,
     },
     rules: {
       'prettier/prettier': 'error',
-      '@typescript-eslint/explicit-module-boundary-types': 'off'
-    }
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+    },
   },
-  prettier
+  prettier,
 ];

@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "removeComments": true,
     "module": "commonjs",
-    "strict": true,
+    "strict": false,
+    "noImplicitAny": false,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "outDir": "./dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["mocha", "chai", "node"]
   },
-  "include": ["src"],
+  "include": ["src/**/*", "src/test/**/*"],
   "exclude": ["node_modules"]
 }
